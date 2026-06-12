@@ -12,11 +12,24 @@ export function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (nif.trim() !== '' && senha.trim() !== '') {
-      navigate('/dashboard');
-    } else {
+    if (nif.trim() === '' || senha.trim() === '') {
       alert('Por favor, preencha o NIF e a Senha.');
+      return;
     }
+
+    // LOGIN TEMPORÁRIO ADMIN
+    if (nif === 'admin' && senha === '123') {
+      navigate('/admin/dashboard');
+      return;
+    }
+
+    // LOGIN TEMPORÁRIO FUNCIONÁRIO
+    if (nif === 'func' && senha === '123') {
+      navigate('/dashboard');
+      return;
+    }
+
+    alert('Usuário ou senha inválidos.');
   };
 
   return (
@@ -51,7 +64,7 @@ export function Login() {
               </label>
 
               <div className="relative group">
-                <span className="absolute inset-y-0 left-4 flex items-center text-gray-400 group-focus-within:text-red-500 transition-colors">
+                <span className="absolute inset-y-0 left-4 flex items-center text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
@@ -85,7 +98,7 @@ export function Login() {
               </label>
 
               <div className="relative group">
-                <span className="absolute inset-y-0 left-4 flex items-center text-gray-400 group-focus-within:text-red-500 transition-colors">
+                <span className="absolute inset-y-0 left-4 flex items-center text-gray-400">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
@@ -173,6 +186,13 @@ export function Login() {
               Entrar no Sistema
             </button>
           </form>
+
+          {/* LOGIN TEMPORÁRIO */}
+          <div className="mt-6 pt-5 border-t border-gray-200 text-xs text-gray-500">
+            <p className="font-bold mb-2">Login temporário:</p>
+            <p>Admin → NIF: <b>admin</b> | Senha: <b>123</b></p>
+            <p>Funcionário → NIF: <b>func</b> | Senha: <b>123</b></p>
+          </div>
         </div>
 
         <footer className="mt-12 text-center">
