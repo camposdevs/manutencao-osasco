@@ -6,30 +6,47 @@ export function Login() {
   const [nif, setNif] = useState('');
   const [senha, setSenha] = useState('');
   const [verSenha, setVerSenha] = useState(false);
+  const [mensagem, setMensagem] = useState(null);
 
   const navigate = useNavigate();
+
+  const mostrarMensagem = (tipo, texto) => {
+    setMensagem({ tipo, texto });
+
+    setTimeout(() => {
+      setMensagem(null);
+    }, 3500);
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
 
     if (nif.trim() === '' || senha.trim() === '') {
-      alert('Por favor, preencha o NIF e a Senha.');
+      mostrarMensagem('erro', 'Preencha o NIF e a senha para continuar.');
       return;
     }
 
-    // LOGIN TEMPORÁRIO ADMIN
     if (nif === 'admin' && senha === '123') {
-      navigate('/admin/dashboard');
+      mostrarMensagem('sucesso', 'Login realizado com sucesso. Redirecionando...');
+
+      setTimeout(() => {
+        navigate('/admin/dashboard');
+      }, 700);
+
       return;
     }
 
-    // LOGIN TEMPORÁRIO FUNCIONÁRIO
     if (nif === 'func' && senha === '123') {
-      navigate('/dashboard');
+      mostrarMensagem('sucesso', 'Login realizado com sucesso. Redirecionando...');
+
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 700);
+
       return;
     }
 
-    alert('Usuário ou senha inválidos.');
+    mostrarMensagem('erro', 'NIF ou senha inválidos.');
   };
 
   return (
@@ -56,8 +73,19 @@ export function Login() {
             </p>
           </div>
 
+          {mensagem && (
+            <div
+              className={`mb-5 rounded-xl px-4 py-3 text-sm font-semibold border ${
+                mensagem.tipo === 'erro'
+                  ? 'bg-red-50 text-red-700 border-red-200'
+                  : 'bg-green-50 text-green-700 border-green-200'
+              }`}
+            >
+              {mensagem.texto}
+            </div>
+          )}
+
           <form className="space-y-5" onSubmit={handleLogin}>
-            {/* NIF */}
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-700 ml-1">
                 NIF
@@ -91,7 +119,6 @@ export function Login() {
               </div>
             </div>
 
-            {/* SENHA */}
             <div className="space-y-1">
               <label className="text-sm font-bold text-gray-700 ml-1">
                 Senha
@@ -187,7 +214,6 @@ export function Login() {
             </button>
           </form>
 
-          {/* LOGIN TEMPORÁRIO */}
           <div className="mt-6 pt-5 border-t border-gray-200 text-xs text-gray-500">
             <p className="font-bold mb-2">Login temporário:</p>
             <p>Admin → NIF: <b>admin</b> | Senha: <b>123</b></p>
