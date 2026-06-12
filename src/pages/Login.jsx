@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 1. Importar o hook
-import logoSesi from '/sesi.jpg';
+import logoSesi from '/sesi.png';
 
 export function Login() {
   const [nif, setNif] = useState('');

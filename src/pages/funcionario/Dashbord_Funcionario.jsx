@@ -1,5 +1,5 @@
 import React from 'react';
-import logoSesi from '/sesi.jpg';
+import logoSesi from '/sesi.png';
 import { useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 

@@ -1,27 +1,121 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// Importação das páginas
+// Login
 import { Login } from './pages/Login';
-import Dashbord_Funcionario from './pages/Dashbord_Funcionario';
-import Ferramentas_Funcionario from './pages/Ferramentas_Funcionario';
-import Estoque_Funcionario from './pages/Estoque_Funcionario';
-import Perfil_Funcionario from './pages/Perfil_Funcionario';
+
+// Funcionário
+import DashboardFuncionario from './pages/DashboardFuncionario';
+import ConsultarMateriais from './pages/ConsultarMateriais';
+import RetiradaMaterial from './pages/RetiradaMaterial';
+import MeuHistorico from './pages/MeuHistorico';
+import MeuPerfil from './pages/MeuPerfil';
+
+// Admin
+import DashboardAdmin from './pages/DashboardAdmin';
+import Funcionarios from './pages/Funcionarios';
+import CadastrarFuncionario from './pages/CadastrarFuncionario';
+import Materiais from './pages/Materiais';
+import CadastrarMaterial from './pages/CadastrarMaterial';
+import EditarMaterial from './pages/EditarMaterial';
+import Categorias from './pages/Categorias';
+import EntradaEstoque from './pages/EntradaEstoque';
+import SaidaEstoque from './pages/SaidaEstoque';
+import HistoricoMovimentacoes from './pages/HistoricoMovimentacoes';
+import Relatorios from './pages/Relatorios';
+import PerfilAdmin from './pages/PerfilAdmin';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Pública */}
+        {/* LOGIN */}
         <Route path="/" element={<Login />} />
 
-        {/* Privadas (Funcionário) */}
-        <Route path="/dashboard" element={<Dashbord_Funcionario />} />
-        <Route path="/ferramentas" element={<Ferramentas_Funcionario />} />
-        <Route path="/estoque" element={<Estoque_Funcionario />} />
-        <Route path="/perfil" element={<Perfil_Funcionario />} />
-        
-        {/* Redirecionamento de segurança */}
-        {/* Usar o Navigate é uma prática comum para "limpar" a URL errada */}
+        {/* =========================
+            FUNCIONÁRIO
+        ========================== */}
+        <Route path="/dashboard" element={<DashboardFuncionario />} />
+        <Route
+          path="/consultar-materiais"
+          element={<ConsultarMateriais />}
+        />
+        <Route
+          path="/retirada-material"
+          element={<RetiradaMaterial />}
+        />
+        <Route
+          path="/meu-historico"
+          element={<MeuHistorico />}
+        />
+        <Route
+          path="/meu-perfil"
+          element={<MeuPerfil />}
+        />
+
+        {/* =========================
+            ADMIN
+        ========================== */}
+        <Route
+          path="/admin/dashboard"
+          element={<DashboardAdmin />}
+        />
+
+        <Route
+          path="/admin/funcionarios"
+          element={<Funcionarios />}
+        />
+
+        <Route
+          path="/admin/cadastrar-funcionario"
+          element={<CadastrarFuncionario />}
+        />
+
+        <Route
+          path="/admin/materiais"
+          element={<Materiais />}
+        />
+
+        <Route
+          path="/admin/cadastrar-material"
+          element={<CadastrarMaterial />}
+        />
+
+        <Route
+          path="/admin/editar-material"
+          element={<EditarMaterial />}
+        />
+
+        <Route
+          path="/admin/categorias"
+          element={<Categorias />}
+        />
+
+        <Route
+          path="/admin/entrada-estoque"
+          element={<EntradaEstoque />}
+        />
+
+        <Route
+          path="/admin/saida-estoque"
+          element={<SaidaEstoque />}
+        />
+
+        <Route
+          path="/admin/historico-movimentacoes"
+          element={<HistoricoMovimentacoes />}
+        />
+
+        <Route
+          path="/admin/relatorios"
+          element={<Relatorios />}
+        />
+
+        <Route
+          path="/admin/perfil"
+          element={<PerfilAdmin />}
+        />
+
+        {/* REDIRECIONAMENTO */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

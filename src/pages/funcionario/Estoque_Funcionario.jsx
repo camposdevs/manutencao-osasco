@@ -1,23 +1,23 @@
 import React from 'react';
-import logoSesi from '/sesi.jpg';
+import logoSesi from '/sesi.png';
 import { useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Wrench, 
   Box, 
   ClipboardList, 
-  User,
+  User, 
   LogOut, 
   Search, 
   FilterX, 
-  Settings,
-  CheckCircle2,
-  Clock,
-  Package,
+  AlertTriangle,
+  Archive,
+  BarChart3,
+  Layers,
   Menu
 } from 'lucide-react';
 
-const Ferramentas_Funcionario = () => {
+const Estoque_Funcionario = () => {
   const navigate = useNavigate();
 
   return (
@@ -36,17 +36,17 @@ const Ferramentas_Funcionario = () => {
         
         <nav className="flex-1 px-4 space-y-1">
           <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => navigate('/dashboard')} />
-          <NavItem icon={<Wrench size={20} />} label="Ferramentas" active={true} onClick={() => navigate('/ferramentas')} />
-          <NavItem icon={<Box size={20} />} label="Estoque" onClick={() => navigate('/estoque')} />
+          <NavItem icon={<Wrench size={20} />} label="Ferramentas" onClick={() => navigate('/ferramentas')} />
+          <NavItem icon={<Box size={20} />} label="Estoque" active={true} onClick={() => navigate('/estoque')} />
           <NavItem icon={<ClipboardList size={20} />} label="Empréstimos" onClick={() => navigate('/dashboard')} />
           <NavItem icon={<ClipboardList size={20} />} label="Meus Empréstimos" onClick={() => navigate('/dashboard')} />
           <NavItem icon={<User size={20} />} label="Perfil" onClick={() => navigate('/perfil')} />
         </nav>
-                
+
         <div className="p-4 border-t border-gray-100">
           <button 
             onClick={() => navigate('/')} 
-            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-red-600 transition-colors w-full"
+            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-red-600 transition-colors w-full text-left"
           >
             <LogOut size={20} />
             <span className="font-medium text-sm">Sair</span>
@@ -61,8 +61,8 @@ const Ferramentas_Funcionario = () => {
           <div className="flex items-center gap-4 text-gray-600 font-semibold">
             <Menu size={20} className="cursor-pointer" />
             <div className="flex items-center gap-2">
-              <Wrench size={18} />
-              <span>Ferramentas</span>
+              <Archive size={18} />
+              <span>Estoque</span>
             </div>
           </div>
           
@@ -79,26 +79,26 @@ const Ferramentas_Funcionario = () => {
 
         <div className="p-8">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">Catálogo de Ferramentas</h1>
-            <p className="text-gray-500 text-sm">Consulte as ferramentas disponíveis e solicite empréstimo.</p>
+            <h1 className="text-2xl font-bold text-gray-900 leading-tight">Estoque de Materiais</h1>
+            <p className="text-gray-500 text-sm">Visualize o saldo de materiais de consumo e componentes.</p>
           </div>
 
           {/* Cards de Resumo */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <SummaryCard icon={<Wrench size={20} />} label="Total" value="58" sub="itens" colorClass="text-red-600" bgColor="bg-red-50" />
-            <SummaryCard icon={<CheckCircle2 size={20} />} label="Disponíveis" value="42" sub="itens" colorClass="text-green-600" bgColor="bg-green-50" />
-            <SummaryCard icon={<Clock size={20} />} label="Em uso" value="12" sub="itens" colorClass="text-orange-600" bgColor="bg-orange-50" />
-            <SummaryCard icon={<Package size={20} />} label="Manutenção" value="4" sub="itens" colorClass="text-purple-600" bgColor="bg-purple-50" />
+            <SummaryCard icon={<Layers size={20} />} label="Total de Itens" value="1.240" sub="unid." colorClass="text-blue-600" bgColor="bg-blue-50" />
+            <SummaryCard icon={<BarChart3 size={20} />} label="Em Estoque" value="856" sub="itens" colorClass="text-green-600" bgColor="bg-green-50" />
+            <SummaryCard icon={<AlertTriangle size={20} />} label="Estoque Baixo" value="12" sub="alerta" colorClass="text-red-600" bgColor="bg-red-50" />
+            <SummaryCard icon={<Archive size={20} />} label="Categorias" value="18" sub="tipos" colorClass="text-gray-600" bgColor="bg-gray-100" />
           </div>
 
           {/* Filtros */}
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-6 flex flex-wrap gap-4 items-end">
             <div className="flex-1 min-w-[300px]">
-              <label className="text-[11px] font-bold text-gray-400 mb-1.5 block uppercase tracking-wider">Buscar Ferramenta</label>
+              <label className="text-[11px] font-bold text-gray-400 mb-1.5 block uppercase tracking-wider">Pesquisar Material</label>
               <div className="relative">
                 <input 
                   type="text" 
-                  placeholder="Buscar por nome, código ou categoria..." 
+                  placeholder="Nome, código ou especificação..." 
                   className="w-full pl-4 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-100 focus:border-red-500 transition-all" 
                 />
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -110,39 +110,35 @@ const Ferramentas_Funcionario = () => {
             </button>
           </div>
 
-          {/* Tabela de Ferramentas */}
+          {/* Tabela de Estoque */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <table className="w-full text-left text-sm">
               <thead className="bg-gray-50 border-b border-gray-200 text-gray-500 text-[11px] uppercase tracking-wider">
                 <tr>
                   <th className="px-6 py-4 font-bold">Código</th>
-                  <th className="px-6 py-4 font-bold">Ferramenta</th>
+                  <th className="px-6 py-4 font-bold">Item</th>
                   <th className="px-6 py-4 font-bold">Categoria</th>
-                  <th className="px-6 py-4 text-center font-bold">Qtd. Disp.</th>
-                  <th className="px-6 py-4 font-bold">Status</th>
-                  <th className="px-6 py-4 text-center font-bold">Ação</th>
+                  <th className="px-6 py-4 text-center font-bold">Qtd. Atual</th>
+                  <th className="px-6 py-4 text-center font-bold">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {toolsData.map((tool, index) => (
+                {stockData.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-500">{tool.code}</td>
-                    <td className="px-6 py-4 font-bold text-gray-900">{tool.name}</td>
-                    <td className="px-6 py-4 text-gray-600 text-xs">{tool.category}</td>
-                    <td className="px-6 py-4 text-center font-bold text-green-600">{tool.available}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${getStatusStyle(tool.status)}`}>
-                        {tool.status}
-                      </span>
+                    <td className="px-6 py-4 font-medium text-gray-500">{item.code}</td>
+                    <td className="px-6 py-4 font-bold text-gray-900">{item.name}</td>
+                    <td className="px-6 py-4 text-gray-600 text-xs">{item.category}</td>
+                    <td className="px-6 py-4 text-center font-bold">
+                      {item.currentQty} <span className="text-[10px] text-gray-400 font-normal">{item.unit}</span>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {tool.status === 'Disponível' ? (
-                        <button className="bg-red-600 text-white px-4 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-red-700 shadow-sm transition-all active:scale-95">
-                          Solicitar
-                        </button>
-                      ) : (
-                        <span className="text-gray-300 font-bold">—</span>
-                      )}
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${
+                        item.currentQty <= item.minQty 
+                          ? 'bg-red-100 text-red-700' 
+                          : 'bg-green-100 text-green-700'
+                      }`}>
+                        {item.currentQty <= item.minQty ? 'Repor Agora' : 'Em Dia'}
+                      </span>
                     </td>
                   </tr>
                 ))}
@@ -189,20 +185,13 @@ const SummaryCard = ({ icon, label, value, sub, colorClass, bgColor }) => (
   </div>
 );
 
-const getStatusStyle = (status) => {
-  switch (status) {
-    case 'Disponível': return 'bg-green-100 text-green-700';
-    case 'Em uso': return 'bg-orange-100 text-orange-700';
-    case 'Manutenção': return 'bg-purple-100 text-purple-700';
-    default: return 'bg-gray-100 text-gray-700';
-  }
-};
-
-const toolsData = [
-  { code: 'FER0001', name: 'Furadeira Bosch GSB 550', category: 'Elétricas', available: 1, status: 'Disponível' },
-  { code: 'FER0002', name: 'Esmerilhadeira Angular 4.1/2"', category: 'Elétricas', available: 3, status: 'Disponível' },
-  { code: 'FER0009', name: 'Nível de Alumínio 12"', category: 'Medição', available: 0, status: 'Manutenção' },
-  { code: 'FER0010', name: 'Serra Tico-Tico', category: 'Elétricas', available: 0, status: 'Em uso' },
+const stockData = [
+  { code: 'MAT001', name: 'Luva de Proteção Nitrílica', category: 'Segurança (EPI)', currentQty: 45, minQty: 50, unit: 'Pares' },
+  { code: 'MAT042', name: 'Parafuso Sextavado 8mm', category: 'Fixação', currentQty: 500, minQty: 100, unit: 'Unid.' },
+  { code: 'MAT089', name: 'Eletrodo Revestido 2.5mm', category: 'Soldagem', currentQty: 15, minQty: 20, unit: 'Kg' },
+  { code: 'MAT102', name: 'Fita Isolante 20m', category: 'Elétrica', currentQty: 12, minQty: 10, unit: 'Rolos' },
+  { code: 'MAT156', name: 'Graxa Azul Lítio', category: 'Lubrificantes', currentQty: 4, minQty: 5, unit: 'Potes' },
+  { code: 'MAT210', name: 'Disco de Lixa G80', category: 'Abrasivos', currentQty: 120, minQty: 50, unit: 'Unid.' },
 ];
 
-export default Ferramentas_Funcionario;
+export default Estoque_Funcionario;
