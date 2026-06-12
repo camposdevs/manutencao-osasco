@@ -15,6 +15,14 @@ import {
   Info,
 } from 'lucide-react';
 
+const usuarioData = {
+  nome: 'João Silva',
+  nif: '25163129',
+  cargo: 'Funcionário',
+  email: 'joao.silva@sesisenaisp.org.br',
+  iniciais: 'JS',
+};
+
 const MeuPerfil = () => {
   const navigate = useNavigate();
 
@@ -24,11 +32,52 @@ const MeuPerfil = () => {
     confirmar: false,
   });
 
+  const [senhaAtual, setSenhaAtual] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState('');
+
   const togglePassword = (field) => {
     setShowPasswords((prev) => ({
       ...prev,
       [field]: !prev[field],
     }));
+  };
+
+  const atualizarSenha = (e) => {
+    e.preventDefault();
+
+    setErro('');
+    setSucesso('');
+
+    if (!senhaAtual || !novaSenha || !confirmarSenha) {
+      setErro('Preencha todos os campos de senha.');
+      return;
+    }
+
+    if (novaSenha.length < 6) {
+      setErro('A nova senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      setErro('A nova senha e a confirmação não conferem.');
+      return;
+    }
+
+    const dadosSenha = {
+      nif: usuarioData.nif,
+      senha_atual: senhaAtual,
+      nova_senha: novaSenha,
+    };
+
+    console.log('Dados prontos para enviar ao banco:', dadosSenha);
+
+    setSucesso('Senha validada no front. Depois será integrada ao banco.');
+    setSenhaAtual('');
+    setNovaSenha('');
+    setConfirmarSenha('');
   };
 
   return (
@@ -44,36 +93,11 @@ const MeuPerfil = () => {
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
-          <NavItem
-            icon={<LayoutDashboard size={20} />}
-            label="Dashboard"
-            onClick={() => navigate('/dashboard')}
-          />
-
-          <NavItem
-            icon={<Boxes size={20} />}
-            label="Consultar Materiais"
-            onClick={() => navigate('/consultar-materiais')}
-          />
-
-          <NavItem
-            icon={<ClipboardList size={20} />}
-            label="Retirar Material"
-            onClick={() => navigate('/retirada-material')}
-          />
-
-          <NavItem
-            icon={<History size={20} />}
-            label="Meu Histórico"
-            onClick={() => navigate('/meu-historico')}
-          />
-
-          <NavItem
-            icon={<User size={20} />}
-            label="Meu Perfil"
-            active
-            onClick={() => navigate('/meu-perfil')}
-          />
+          <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" onClick={() => navigate('/dashboard')} />
+          <NavItem icon={<Boxes size={20} />} label="Consultar Materiais" onClick={() => navigate('/consultar-materiais')} />
+          <NavItem icon={<ClipboardList size={20} />} label="Retirar Material" onClick={() => navigate('/retirada-material')} />
+          <NavItem icon={<History size={20} />} label="Meu Histórico" onClick={() => navigate('/meu-historico')} />
+          <NavItem icon={<User size={20} />} label="Meu Perfil" active onClick={() => navigate('/meu-perfil')} />
         </nav>
 
         <div className="p-4 border-t border-gray-100">
@@ -97,33 +121,29 @@ const MeuPerfil = () => {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-bold text-gray-900 leading-tight">
-                João Silva
+                {usuarioData.nome}
               </p>
               <p className="text-[10px] text-gray-500 uppercase tracking-tighter">
-                Funcionário
+                {usuarioData.cargo}
               </p>
             </div>
 
             <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
-              JS
+              {usuarioData.iniciais}
             </div>
           </div>
         </header>
 
         <div className="p-8 max-w-6xl">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Meu Perfil
-            </h1>
-
+            <h1 className="text-2xl font-bold text-gray-900">Meu Perfil</h1>
             <p className="text-gray-500 text-sm">
               Visualize seus dados e altere sua senha.
             </p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {/* Dados */}
+            <form onSubmit={atualizarSenha} className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-4">
@@ -131,46 +151,30 @@ const MeuPerfil = () => {
                   </h3>
 
                   <div className="space-y-4">
-                    <ProfileField
-                      label="Nome"
-                      value="João Silva"
-                    />
-
-                    <ProfileField
-                      label="NIF"
-                      value="25163129"
-                    />
-
-                    <ProfileField
-                      label="Cargo"
-                      value="Funcionário"
-                    />
+                    <ProfileField label="Nome" value={usuarioData.nome} />
+                    <ProfileField label="NIF" value={usuarioData.nif} />
+                    <ProfileField label="Cargo" value={usuarioData.cargo} />
+                    <ProfileField label="E-mail" value={usuarioData.email} />
                   </div>
                 </div>
 
                 <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl flex gap-3 items-start text-amber-800">
-                  <Info
-                    size={20}
-                    className="shrink-0 text-amber-600 mt-0.5"
-                  />
-
+                  <Info size={20} className="shrink-0 text-amber-600 mt-0.5" />
                   <p className="text-xs leading-relaxed">
-                    <span className="font-bold uppercase mr-1">
-                      Importante:
-                    </span>
-                    A alteração real de senha será integrada ao banco de
-                    dados futuramente.
+                    <span className="font-bold uppercase mr-1">Importante:</span>
+                    Os dados do funcionário virão do banco após a integração.
                   </p>
                 </div>
               </div>
 
-              {/* Senha */}
               <div className="space-y-5">
                 <PasswordField
                   label="Senha Atual"
                   placeholder="••••••••"
                   visible={showPasswords.atual}
                   toggle={() => togglePassword('atual')}
+                  value={senhaAtual}
+                  onChange={(e) => setSenhaAtual(e.target.value)}
                 />
 
                 <PasswordField
@@ -178,6 +182,8 @@ const MeuPerfil = () => {
                   placeholder="Digite sua nova senha"
                   visible={showPasswords.nova}
                   toggle={() => togglePassword('nova')}
+                  value={novaSenha}
+                  onChange={(e) => setNovaSenha(e.target.value)}
                 />
 
                 <PasswordField
@@ -185,14 +191,31 @@ const MeuPerfil = () => {
                   placeholder="Confirme a nova senha"
                   visible={showPasswords.confirmar}
                   toggle={() => togglePassword('confirmar')}
+                  value={confirmarSenha}
+                  onChange={(e) => setConfirmarSenha(e.target.value)}
                 />
 
-                <button className="w-full bg-red-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-red-700 transition-all shadow-sm shadow-red-200 flex items-center justify-center gap-2">
+                {erro && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm font-medium">
+                    {erro}
+                  </div>
+                )}
+
+                {sucesso && (
+                  <div className="bg-green-50 border border-green-200 text-green-700 rounded-xl px-4 py-3 text-sm font-medium">
+                    {sucesso}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-red-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-red-700 transition-all shadow-sm shadow-red-200 flex items-center justify-center gap-2"
+                >
                   <Lock size={16} />
                   Atualizar Senha
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
 
@@ -204,12 +227,7 @@ const MeuPerfil = () => {
   );
 };
 
-const NavItem = ({
-  icon,
-  label,
-  active = false,
-  onClick,
-}) => (
+const NavItem = ({ icon, label, active = false, onClick }) => (
   <div
     onClick={onClick}
     className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 ${
@@ -235,12 +253,7 @@ const ProfileField = ({ label, value }) => (
   </div>
 );
 
-const PasswordField = ({
-  label,
-  placeholder,
-  visible,
-  toggle,
-}) => (
+const PasswordField = ({ label, placeholder, visible, toggle, value, onChange }) => (
   <div>
     <label className="text-[11px] font-bold text-gray-400 mb-1.5 block uppercase tracking-wider">
       {label}
@@ -250,6 +263,8 @@ const PasswordField = ({
       <input
         type={visible ? 'text' : 'password'}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="w-full px-4 py-3 pr-12 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-100 focus:border-red-500 transition-all"
       />
 
