@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 // Login
 import { Login } from './pages/Login';
+import EsqueciSenha from './pages/EsqueciSenha';
 
 // Funcionário
 import DashboardFuncionario from './pages/funcionario/DashboardFuncionario';
@@ -29,6 +30,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
 
         <Route path="/dashboard" element={<DashboardFuncionario />} />
         <Route path="/consultar-materiais" element={<ConsultarMateriais />} />
