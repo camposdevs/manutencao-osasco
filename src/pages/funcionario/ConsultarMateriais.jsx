@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logoSesi from '/sesi.png';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,19 +13,42 @@ import {
   Menu,
 } from 'lucide-react';
 
+const usuarioData = {
+  nome: 'João Silva',
+  cargo: 'Funcionário',
+  iniciais: 'JS',
+};
+
+const materiaisData = [
+  { id: 1, codigo: 'MAT001', nome: 'Luva de Proteção', categoria: 'EPI', quantidade: 45 },
+  { id: 2, codigo: 'MAT002', nome: 'Fita Isolante', categoria: 'Elétrica', quantidade: 12 },
+  { id: 3, codigo: 'MAT003', nome: 'Parafuso Sextavado', categoria: 'Fixação', quantidade: 500 },
+  { id: 4, codigo: 'MAT004', nome: 'Graxa Azul', categoria: 'Lubrificantes', quantidade: 4 },
+];
+
 const ConsultarMateriais = () => {
   const navigate = useNavigate();
+  const [busca, setBusca] = useState('');
+
+  const materiaisFiltrados = materiaisData.filter((item) => {
+    const termo = busca.toLowerCase();
+
+    return (
+      item.codigo.toLowerCase().includes(termo) ||
+      item.nome.toLowerCase().includes(termo) ||
+      item.categoria.toLowerCase().includes(termo)
+    );
+  });
+
+  const limparFiltros = () => {
+    setBusca('');
+  };
 
   return (
     <div className="flex min-h-screen bg-[#F8F9FA] text-gray-800 font-sans">
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col sticky top-0 h-screen">
         <div className="p-6">
-          <img
-            src={logoSesi}
-            alt="Logo SESI"
-            className="h-10 w-auto object-contain cursor-pointer"
-            onClick={() => navigate('/dashboard')}
-          />
+          <img src={logoSesi} alt="Logo SESI" className="h-10 w-auto object-contain cursor-pointer" onClick={() => navigate('/dashboard')} />
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
@@ -53,11 +76,11 @@ const ConsultarMateriais = () => {
 
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <p className="text-sm font-bold text-gray-900 leading-tight">João Silva</p>
-              <p className="text-[10px] text-gray-500 uppercase tracking-tighter">Funcionário</p>
+              <p className="text-sm font-bold text-gray-900 leading-tight">{usuarioData.nome}</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-tighter">{usuarioData.cargo}</p>
             </div>
             <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">
-              JS
+              {usuarioData.iniciais}
             </div>
           </div>
         </header>
@@ -79,12 +102,18 @@ const ConsultarMateriais = () => {
                   type="text"
                   placeholder="Nome, código ou categoria..."
                   className="w-full pl-4 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-100 focus:border-red-500 transition-all"
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
                 />
                 <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               </div>
             </div>
 
-            <button className="flex items-center gap-2 px-6 py-2.5 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">
+            <button
+              type="button"
+              onClick={limparFiltros}
+              className="flex items-center gap-2 px-6 py-2.5 border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all"
+            >
               <FilterX size={18} />
               Limpar filtros
             </button>
@@ -103,23 +132,29 @@ const ConsultarMateriais = () => {
               </thead>
 
               <tbody className="divide-y divide-gray-100">
-                {stockData.map((item) => (
-                  <tr key={item.code} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-gray-500">{item.code}</td>
-                    <td className="px-6 py-4 font-bold text-gray-900">{item.name}</td>
-                    <td className="px-6 py-4 text-gray-600 text-xs">{item.category}</td>
-                    <td className="px-6 py-4 text-center font-bold">{item.qty}</td>
+                {materiaisFiltrados.map((item) => (
+                  <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-gray-500">{item.codigo}</td>
+                    <td className="px-6 py-4 font-bold text-gray-900">{item.nome}</td>
+                    <td className="px-6 py-4 text-gray-600 text-xs">{item.categoria}</td>
+                    <td className="px-6 py-4 text-center font-bold">{item.quantidade}</td>
                     <td className="px-6 py-4 text-center">
-                      <span
-                        className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${
-                          item.qty <= 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-                        }`}
-                      >
-                        {item.qty <= 5 ? 'Baixo' : 'Disponível'}
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${
+                        item.quantidade <= 5 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                      }`}>
+                        {item.quantidade <= 5 ? 'Baixo' : 'Disponível'}
                       </span>
                     </td>
                   </tr>
                 ))}
+
+                {materiaisFiltrados.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-10 text-center text-gray-400 text-sm">
+                      Nenhum material encontrado.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -146,12 +181,5 @@ const NavItem = ({ icon, label, active = false, onClick }) => (
     <span className="text-sm">{label}</span>
   </div>
 );
-
-const stockData = [
-  { code: 'MAT001', name: 'Luva de Proteção', category: 'EPI', qty: 45 },
-  { code: 'MAT002', name: 'Fita Isolante', category: 'Elétrica', qty: 12 },
-  { code: 'MAT003', name: 'Parafuso Sextavado', category: 'Fixação', qty: 500 },
-  { code: 'MAT004', name: 'Graxa Azul', category: 'Lubrificantes', qty: 4 },
-];
 
 export default ConsultarMateriais;
